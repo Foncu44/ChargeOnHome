@@ -1,0 +1,15 @@
+com\chargeonhome\backend\repository\UsuarioRepository.class
+com\chargeonhome\backend\dto\RegistroRequest.class
+com\chargeonhome\backend\model\TipoUsuario.class
+com\chargeonhome\backend\model\Reserva.class
+com\chargeonhome\backend\ChargeOnHomeApplication.class
+com\chargeonhome\backend\model\Usuario.class
+com\chargeonhome\backend\controller\AuthController.class
+com\chargeonhome\backend\dto\UsuarioResponse.class
+com\chargeonhome\backend\config\SecurityConfig.class
+com\chargeonhome\backend\dto\LoginRequest.class
+com\chargeonhome\backend\model\EstadoReserva.class
+com\chargeonhome\backend\dto\AuthResponse.class
+com\chargeonhome\backend\service\UsuarioService.class
+com\chargeonhome\backend\model\Garaje.class
+com\chargeonhome\backend\model\TipoConector.class

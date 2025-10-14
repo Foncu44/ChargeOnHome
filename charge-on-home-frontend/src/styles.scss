@@ -1,0 +1,318 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { 
+  height: 100%; 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Estilos globales responsive
+* {
+  box-sizing: border-box;
+}
+
+// Mejoras para formularios en móviles
+input, textarea, select {
+  font-size: 16px !important; // Previene zoom automático en iOS
+}
+
+// Mejoras para Angular Material en móviles
+.mat-mdc-form-field {
+  width: 100%;
+  
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        min-height: 48px; // Mejor área de toque en móviles
+      }
+    }
+  }
+}
+
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
+  min-height: 44px; // Área de toque recomendada
+  
+  @media (max-width: 768px) {
+    min-height: 48px; // Más grande en móviles
+  }
+}
+
+// Mejoras para el sidenav en móviles
+.mat-drawer-container {
+  .mat-drawer {
+    @media (max-width: 768px) {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+  }
+}
+
+// Mejoras para cards en móviles
+.mat-mdc-card {
+  @media (max-width: 768px) {
+    margin: 8px;
+    border-radius: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 4px;
+    border-radius: 8px;
+  }
+}
+
+// Mejoras para toolbars en móviles
+.mat-toolbar {
+  @media (max-width: 768px) {
+    padding: 0 8px;
+    min-height: 56px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0 4px;
+    min-height: 48px;
+  }
+}
+
+// Mejoras para menús en móviles
+.mat-mdc-menu-panel {
+  @media (max-width: 768px) {
+    min-width: 200px;
+    max-width: 90vw;
+  }
+}
+
+// Mejoras para diálogos en móviles
+.mat-mdc-dialog-container {
+  @media (max-width: 768px) {
+    margin: 16px;
+    max-height: calc(100vh - 32px);
+    max-width: calc(100vw - 32px);
+  }
+  
+  @media (max-width: 480px) {
+    margin: 8px;
+    max-height: calc(100vh - 16px);
+    max-width: calc(100vw - 16px);
+  }
+}
+
+// Mejoras para selects en móviles
+.mat-mdc-select-panel {
+  @media (max-width: 768px) {
+    max-height: 60vh;
+  }
+}
+
+// Mejoras para datepickers en móviles
+.mat-datepicker-popup {
+  @media (max-width: 768px) {
+    .mat-calendar {
+      width: 100%;
+      max-width: 320px;
+    }
+  }
+}
+
+// Utilidades responsive
+.hide-mobile {
+  @media (max-width: 768px) {
+    display: none !important;
+  }
+}
+
+.show-mobile {
+  display: none !important;
+  
+  @media (max-width: 768px) {
+    display: block !important;
+  }
+}
+
+.hide-desktop {
+  @media (min-width: 769px) {
+    display: none !important;
+  }
+}
+
+.show-desktop {
+  display: none !important;
+  
+  @media (min-width: 769px) {
+    display: block !important;
+  }
+}
+
+// Mejoras para scroll en móviles
+.scroll-container {
+  -webkit-overflow-scrolling: touch;
+  overflow-y: auto;
+}
+
+// Mejoras para touch targets
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  @media (max-width: 768px) {
+    min-height: 48px;
+    min-width: 48px;
+  }
+}
+
+// Mejoras para texto en móviles
+.responsive-text {
+  @media (max-width: 768px) {
+    font-size: 0.9em;
+  }
+  
+  @media (max-width: 480px) {
+    font-size: 0.85em;
+  }
+}
+
+// Mejoras para espaciado en móviles
+.responsive-padding {
+  padding: 20px;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
+}
+
+.responsive-margin {
+  margin: 20px;
+  
+  @media (max-width: 768px) {
+    margin: 16px;
+  }
+  
+  @media (max-width: 480px) {
+    margin: 12px;
+  }
+}
+
+// Mejoras para grid responsive
+.responsive-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
+}
+
+// Mejoras para flexbox responsive
+.responsive-flex {
+  display: flex;
+  gap: 16px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  @media (max-width: 480px) {
+    gap: 8px;
+  }
+}
+
+// Mejoras para imágenes responsive
+.responsive-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+// Mejoras para contenedores responsive
+.responsive-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  
+  @media (max-width: 768px) {
+    padding: 0 16px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 0 12px;
+  }
+}
+
+// Mejoras para accesibilidad
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// Mejoras para modo oscuro
+@media (prefers-color-scheme: dark) {
+  .mat-app-background {
+    background-color: #303030;
+    color: white;
+  }
+}
+
+// Mejoras para alto contraste
+@media (prefers-contrast: high) {
+  .mat-mdc-button,
+  .mat-mdc-raised-button,
+  .mat-mdc-outlined-button {
+    border: 2px solid currentColor;
+  }
+}
+
+// Mejoras específicas para iOS
+@supports (-webkit-touch-callout: none) {
+  // Previene el zoom automático en inputs
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+  
+  // Mejora el scroll en iOS
+  .scroll-container {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  // Mejora los botones en iOS
+  button {
+    -webkit-appearance: none;
+    border-radius: 8px;
+  }
+}
+
+// Mejoras para pantallas de alta densidad
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .mat-mdc-card {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .mat-mdc-raised-button {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}

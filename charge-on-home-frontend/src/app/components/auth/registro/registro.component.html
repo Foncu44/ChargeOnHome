@@ -1,0 +1,118 @@
+<div class="registro-container">
+  <mat-card class="registro-card">
+    <mat-card-header>
+      <mat-card-title>Crear Cuenta</mat-card-title>
+      <mat-card-subtitle>Únete a ChargeOnHome y empieza a cargar tu vehículo eléctrico</mat-card-subtitle>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" placeholder="Tu nombre">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="registroForm.get('nombre')?.hasError('required')">
+              El nombre es obligatorio
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Apellidos</mat-label>
+            <input matInput formControlName="apellidos" placeholder="Tus apellidos">
+            <mat-error *ngIf="registroForm.get('apellidos')?.hasError('required')">
+              Los apellidos son obligatorios
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="tu@email.com">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="registroForm.get('email')?.hasError('required')">
+            El email es obligatorio
+          </mat-error>
+          <mat-error *ngIf="registroForm.get('email')?.hasError('email')">
+            Introduce un email válido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Teléfono (opcional)</mat-label>
+          <input matInput type="tel" formControlName="telefono" placeholder="+34 600 000 000">
+          <mat-icon matSuffix>phone</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+          <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button">
+            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="registroForm.get('password')?.hasError('required')">
+            La contraseña es obligatoria
+          </mat-error>
+          <mat-error *ngIf="registroForm.get('password')?.hasError('minlength')">
+            La contraseña debe tener al menos 6 caracteres
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Confirmar Contraseña</mat-label>
+          <input matInput [type]="hideConfirmPassword ? 'password' : 'text'" formControlName="confirmarPassword">
+          <button mat-icon-button matSuffix (click)="hideConfirmPassword = !hideConfirmPassword" type="button">
+            <mat-icon>{{hideConfirmPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+          <mat-error *ngIf="registroForm.get('confirmarPassword')?.hasError('required')">
+            Confirma tu contraseña
+          </mat-error>
+          <mat-error *ngIf="registroForm.hasError('passwordMismatch') && registroForm.get('confirmarPassword')?.touched">
+            Las contraseñas no coinciden
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Tipo de Usuario</mat-label>
+          <mat-select formControlName="tipoUsuario">
+            <mat-option value="CLIENTE">
+              <mat-icon>electric_car</mat-icon>
+              Solo busco cargar mi vehículo
+            </mat-option>
+            <mat-option value="PROPIETARIO">
+              <mat-icon>home</mat-icon>
+              Quiero alquilar mi garaje
+            </mat-option>
+            <mat-option value="AMBOS">
+              <mat-icon>swap_horiz</mat-icon>
+              Ambas opciones
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="registroForm.get('tipoUsuario')?.hasError('required')">
+            Selecciona el tipo de usuario
+          </mat-error>
+        </mat-form-field>
+
+        <div class="error-message" *ngIf="errorMessage">
+          <mat-icon>error</mat-icon>
+          {{ errorMessage }}
+        </div>
+
+        <div class="registro-actions">
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="registroForm.invalid || isLoading" class="full-width">
+            <mat-spinner diameter="20" *ngIf="isLoading"></mat-spinner>
+            <span *ngIf="!isLoading">Crear Cuenta</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <div class="login-link">
+        <span>¿Ya tienes cuenta? </span>
+        <a mat-button color="primary" routerLink="/login">Inicia sesión aquí</a>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+</div>

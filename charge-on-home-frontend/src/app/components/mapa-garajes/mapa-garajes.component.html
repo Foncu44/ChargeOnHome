@@ -1,73 +1,81 @@
 <div class="mapa-container">
   <!-- Header con navegación -->
-  <mat-toolbar color="primary" class="app-toolbar">
-    <span class="logo">
-      <mat-icon>electric_car</mat-icon>
-      ChargeOnHome
-    </span>
-    
-    <span class="spacer"></span>
-    
-    <div class="user-menu" *ngIf="currentUser$ | async as user; else loginButtons">
-      <button mat-button [matMenuTriggerFor]="userMenu">
-        <mat-icon>account_circle</mat-icon>
-        {{ user.nombre }}
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item routerLink="/perfil">
-          <mat-icon>person</mat-icon>
-          Mi Perfil
-        </button>
-        <button mat-menu-item routerLink="/registrar-garaje" *ngIf="user.tipoUsuario === 'PROPIETARIO' || user.tipoUsuario === 'AMBOS'">
-          <mat-icon>add_home</mat-icon>
-          Registrar Garaje
-        </button>
-        <mat-divider></mat-divider>
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          Cerrar Sesión
-        </button>
-      </mat-menu>
+  <header class="app-header">
+    <div class="header-content">
+      <div class="logo">
+        <mat-icon>home</mat-icon>
+        <span>Garage Rentals</span>
+      </div>
+      
+      <div class="header-actions">
+        <div class="user-menu" *ngIf="currentUser$ | async as user; else loginButtons">
+          <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+            <mat-icon>account_circle</mat-icon>
+            {{ user.nombre }}
+            <mat-icon>arrow_drop_down</mat-icon>
+          </button>
+          <mat-menu #userMenu="matMenu">
+            <button mat-menu-item routerLink="/perfil">
+              <mat-icon>person</mat-icon>
+              Mi Perfil
+            </button>
+            <button mat-menu-item routerLink="/registrar-garaje" *ngIf="user.tipoUsuario === 'PROPIETARIO' || user.tipoUsuario === 'AMBOS'">
+              <mat-icon>add_home</mat-icon>
+              Publicar Garaje
+            </button>
+            <mat-divider></mat-divider>
+            <button mat-menu-item (click)="logout()">
+              <mat-icon>logout</mat-icon>
+              Cerrar Sesión
+            </button>
+          </mat-menu>
+        </div>
+        
+        <ng-template #loginButtons>
+          <button mat-button routerLink="/login" class="login-button">Iniciar Sesión</button>
+          <button mat-raised-button routerLink="/registro" class="register-button">Registrarse</button>
+        </ng-template>
+      </div>
     </div>
     
-    <ng-template #loginButtons>
-      <button mat-button routerLink="/login">Iniciar Sesión</button>
-      <button mat-raised-button color="accent" routerLink="/registro">Registrarse</button>
-    </ng-template>
-  </mat-toolbar>
+    <!-- Barra de búsqueda -->
+    <div class="search-bar-container">
+      <div class="search-bar">
+        <mat-icon class="search-icon">search</mat-icon>
+        <input type="text" 
+               placeholder="Buscar por ciudad, dirección..." 
+               class="search-input"
+               [formControl]="filtrosForm.get('ubicacion')!"
+               (keyup.enter)="aplicarFiltros()">
+      </div>
+      <div class="search-actions">
+        <button mat-icon-button class="filter-button" (click)="toggleSidenav()">
+          <mat-icon>filter_list</mat-icon>
+        </button>
+        <button mat-icon-button class="view-toggle-button" (click)="toggleViewMode()">
+          <mat-icon>{{ vistaActual === 'list' ? 'map' : 'view_list' }}</mat-icon>
+        </button>
+      </div>
+    </div>
+  </header>
 
   <!-- Contenido principal -->
   <div class="main-content">
-    <!-- Panel de filtros -->
+    <!-- Panel de filtros (sidenav) -->
     <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav mode="side" opened class="filters-sidenav">
+      <mat-sidenav #sidenav mode="over" class="filters-sidenav" [opened]="false">
         <div class="filters-panel">
-          <h3>
-            <mat-icon>filter_list</mat-icon>
-            Filtros de Búsqueda
-          </h3>
+          <div class="filters-header">
+            <h3>
+              <mat-icon>filter_list</mat-icon>
+              Filtros de Búsqueda
+            </h3>
+            <button mat-icon-button class="close-filters-btn" (click)="closeSidenav()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
           
           <form [formGroup]="filtrosForm" (ngSubmit)="aplicarFiltros()">
-            <!-- Ubicación -->
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Ubicación</mat-label>
-              <input matInput formControlName="ubicacion" placeholder="Madrid, Barcelona...">
-              <mat-icon matSuffix>location_on</mat-icon>
-            </mat-form-field>
-
-            <!-- Radio de búsqueda -->
-            <mat-form-field appearance="outline" class="full-width">
-              <mat-label>Radio (km)</mat-label>
-              <mat-select formControlName="radio">
-                <mat-option value="1">1 km</mat-option>
-                <mat-option value="5">5 km</mat-option>
-                <mat-option value="10">10 km</mat-option>
-                <mat-option value="25">25 km</mat-option>
-                <mat-option value="50">50 km</mat-option>
-              </mat-select>
-            </mat-form-field>
-
             <!-- Tipo de conector -->
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>Tipo de Conector</mat-label>
@@ -108,27 +116,10 @@
               Disponible 24 horas
             </mat-checkbox>
 
-            <!-- Fechas -->
-            <div class="date-range">
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Fecha inicio</mat-label>
-                <input matInput [matDatepicker]="pickerInicio" formControlName="fechaInicio">
-                <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-                <mat-datepicker #pickerInicio></mat-datepicker>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="half-width">
-                <mat-label>Fecha fin</mat-label>
-                <input matInput [matDatepicker]="pickerFin" formControlName="fechaFin">
-                <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
-                <mat-datepicker #pickerFin></mat-datepicker>
-              </mat-form-field>
-            </div>
-
             <div class="filter-actions">
               <button mat-raised-button color="primary" type="submit" class="full-width">
                 <mat-icon>search</mat-icon>
-                Buscar Garajes
+                Buscar
               </button>
               <button mat-button type="button" (click)="limpiarFiltros()" class="full-width">
                 <mat-icon>clear</mat-icon>
@@ -139,68 +130,25 @@
         </div>
       </mat-sidenav>
 
-      <!-- Contenido principal con mapa y lista -->
+      <!-- Contenido principal con lista y mapa -->
       <mat-sidenav-content>
         <div class="content-wrapper">
-          <!-- Toggle para mostrar/ocultar filtros en móvil -->
-          <button mat-icon-button class="menu-toggle" (click)="sidenav.toggle()">
-            <mat-icon>menu</mat-icon>
-          </button>
-
-          <!-- Mapa de Google Maps -->
-          <div class="map-container" #mapContainer>
-            <!-- Mostrar Google Maps si está disponible -->
-            <google-map
-              *ngIf="marcadores.length > 0"
-              [center]="center"
-              [zoom]="zoom"
-              [options]="mapOptions"
-              (mapClick)="onMapClick($event)"
-              width="100%"
-              height="100%">
-              
-              <!-- Marcadores de garajes -->
-              <map-marker
-                *ngFor="let marcador of marcadores; let i = index"
-                [position]="marcador.position"
-                [title]="marcador.title"
-                (mapClick)="onMarkerClick($any($event), i)">
-              </map-marker>
-            </google-map>
+          <!-- Panel izquierdo: Lista de garajes -->
+          <div class="garajes-panel" *ngIf="vistaActual === 'list'">
+            <div class="garajes-header">
+              <h3>{{ garajes.length }} garajes disponibles</h3>
+            </div>
             
-            <!-- Placeholder cuando no hay mapa -->
-            <div *ngIf="marcadores.length === 0" class="map-placeholder">
-              <mat-icon>map</mat-icon>
-              <p>Mapa de garajes disponibles</p>
-              <small>{{ garajes.length }} garajes encontrados</small>
-              <br>
-              <small style="color: #999; margin-top: 8px;">
-                Cargando Google Maps...
-              </small>
-            </div>
-          </div>
-
-          <!-- Lista de garajes -->
-          <div class="garajes-list">
-            <div class="list-header">
-              <h3>Garajes Disponibles ({{ garajes.length }})</h3>
-              <mat-button-toggle-group value="list" (change)="cambiarVista($event)">
-                <mat-button-toggle value="list">
-                  <mat-icon>list</mat-icon>
-                </mat-button-toggle>
-                <mat-button-toggle value="grid">
-                  <mat-icon>grid_view</mat-icon>
-                </mat-button-toggle>
-              </mat-button-toggle-group>
-            </div>
-
-            <div class="garajes-container" [class.grid-view]="vistaActual === 'grid'">
+            <div class="garajes-list">
               <mat-card class="garaje-card" *ngFor="let garaje of garajes" (click)="verDetalleGaraje(garaje.id!)">
                 <div class="card-image">
-                  <img [src]="garaje.fotos[0] || '/assets/images/garage-placeholder.jpg'" 
+                  <img [src]="garaje.fotos[0] || '/assets/images/garage-placeholder.svg'" 
                        [alt]="'Garaje en ' + garaje.direccion">
-                  <div class="price-badge">
-                    {{ garaje.precioPorHora }}€/h
+                  <div class="image-overlay">
+                    <div class="price-badge">
+                      <span class="price">{{ garaje.precioPorHora }}€/h</span>
+                      <span class="comision">+20% comisión</span>
+                    </div>
                   </div>
                 </div>
                 
@@ -215,36 +163,18 @@
                       <mat-icon>power</mat-icon>
                       <span>{{ getTipoConectorLabel(garaje.tipoConector) }}</span>
                     </div>
-                    <div class="info-item">
-                      <mat-icon>straighten</mat-icon>
-                      <span>{{ garaje.ancho }}x{{ garaje.largo }}x{{ garaje.altura }}m</span>
-                    </div>
                     <div class="info-item" *ngIf="garaje.disponible24h">
                       <mat-icon>schedule</mat-icon>
-                      <span>24h disponible</span>
+                      <span>24h</span>
                     </div>
                   </div>
-                  <p class="description" *ngIf="garaje.descripcion">
-                    {{ garaje.descripcion | slice:0:100 }}{{ garaje.descripcion!.length > 100 ? '...' : '' }}
-                  </p>
                 </mat-card-content>
-                
-                <mat-card-actions>
-                  <button mat-button color="primary">
-                    <mat-icon>visibility</mat-icon>
-                    Ver Detalles
-                  </button>
-                  <button mat-raised-button color="accent">
-                    <mat-icon>event</mat-icon>
-                    Reservar
-                  </button>
-                </mat-card-actions>
               </mat-card>
 
               <!-- Mensaje cuando no hay garajes -->
               <div class="no-garajes" *ngIf="garajes.length === 0 && !isLoading">
                 <mat-icon>search_off</mat-icon>
-                <h3>No se encontraron garajes</h3>
+                <h3>No se encontraron garajes disponibles</h3>
                 <p>Intenta ajustar los filtros de búsqueda</p>
               </div>
 
@@ -252,6 +182,49 @@
               <div class="loading" *ngIf="isLoading">
                 <mat-spinner></mat-spinner>
                 <p>Buscando garajes...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel derecho: Mapa -->
+          <div class="mapa-panel" [class.full-width]="vistaActual === 'map'">
+            <div class="map-container">
+              <google-map
+                *ngIf="marcadores.length > 0"
+                [center]="center"
+                [zoom]="zoom"
+                [options]="mapOptions"
+                (mapClick)="onMapClick($event)"
+                width="100%"
+                height="100%">
+                
+                <!-- Marcadores de garajes -->
+                <map-marker
+                  *ngFor="let marcador of marcadores; let i = index"
+                  [position]="marcador.position"
+                  [title]="marcador.title"
+                  [options]="{
+                    icon: {
+                      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                        <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>
+                          <circle cx='20' cy='20' r='18' fill='#4CAF50' stroke='#2E7D32' stroke-width='2'/>
+                          <path d='M20 12 L20 28 M12 20 L28 20' stroke='white' stroke-width='2' stroke-linecap='round'/>
+                          <circle cx='20' cy='20' r='6' fill='white'/>
+                        </svg>
+                      `),
+                      scaledSize: { width: 40, height: 40 },
+                      anchor: { x: 20, y: 20 }
+                    }
+                  }"
+                  (mapClick)="onMarkerClick($any($event), i)">
+                </map-marker>
+              </google-map>
+              
+              <!-- Placeholder cuando no hay mapa -->
+              <div *ngIf="marcadores.length === 0" class="map-placeholder">
+                <mat-icon>map</mat-icon>
+                <p>Mapa de garajes disponibles</p>
+                <small>{{ garajes.length }} garajes encontrados</small>
               </div>
             </div>
           </div>

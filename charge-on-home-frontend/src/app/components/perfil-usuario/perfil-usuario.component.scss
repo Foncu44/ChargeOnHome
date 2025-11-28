@@ -1,0 +1,394 @@
+.perfil-usuario-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--gray-50);
+}
+
+.app-toolbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: var(--gradient-primary);
+  box-shadow: var(--shadow-lg);
+  
+  .back-button {
+    color: white;
+    margin-right: var(--space-md);
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    
+    mat-icon {
+      font-size: 1.5rem;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  
+  .spacer {
+    flex: 1;
+  }
+}
+
+.main-content {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: var(--space-xl);
+}
+
+.profile-tabs {
+  background: white;
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  
+  ::ng-deep .mat-mdc-tab-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-bottom: 1px solid var(--gray-200);
+  }
+  
+  ::ng-deep .mat-mdc-tab-body-content {
+    padding: var(--space-xl);
+  }
+}
+
+.tab-content {
+  h2 {
+    font-family: var(--font-heading);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-xl);
+  }
+}
+
+.profile-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  
+  mat-card-header {
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 600;
+      
+      mat-icon {
+        color: var(--primary-color);
+      }
+    }
+  }
+  
+  mat-card-content {
+    padding: var(--space-xl);
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+  
+  .form-field-half {
+    flex: 1;
+  }
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: var(--space-md);
+}
+
+.form-actions {
+  margin-top: var(--space-xl);
+  display: flex;
+  justify-content: flex-end;
+  
+  button {
+    min-height: 48px;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    text-transform: none;
+  }
+}
+
+.garajes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xl);
+  
+  h2 {
+    margin: 0;
+  }
+  
+  button {
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    text-transform: none;
+  }
+}
+
+.garajes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--space-xl);
+}
+
+.garaje-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: var(--gradient-accent);
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .card-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
+      padding: var(--space-md);
+      
+      .price-badge {
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+  
+  mat-card-content {
+    h3 {
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--gray-900);
+      margin: 0 0 var(--space-md) 0;
+    }
+    
+    .garaje-info {
+      display: flex;
+      gap: var(--space-lg);
+      margin-bottom: var(--space-md);
+      font-size: 0.875rem;
+      color: var(--gray-600);
+      
+      span {
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        
+        mat-icon {
+          font-size: 1rem;
+          width: 1rem;
+          height: 1rem;
+          color: var(--primary-color);
+        }
+      }
+    }
+    
+    p {
+      margin: 0;
+      color: var(--gray-700);
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+  }
+  
+  mat-card-actions {
+    padding: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    
+    button {
+      flex: 1;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      text-transform: none;
+    }
+  }
+}
+
+.reservas-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.reserva-card {
+  background: white;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  
+  mat-card-header {
+    mat-card-title {
+      font-family: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+    
+    mat-card-subtitle {
+      margin-top: var(--space-sm);
+    }
+  }
+  
+  mat-card-content {
+    .reserva-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--space-lg);
+      
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-md);
+        
+        mat-icon {
+          color: var(--primary-color);
+          font-size: 1.5rem;
+          width: 1.5rem;
+          height: 1.5rem;
+        }
+        
+        div {
+          display: flex;
+          flex-direction: column;
+          
+          .label {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+          }
+          
+          .value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--gray-900);
+          }
+        }
+      }
+    }
+  }
+  
+  mat-card-actions {
+    padding: var(--space-md);
+    display: flex;
+    gap: var(--space-sm);
+    
+    button {
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      text-transform: none;
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3xl);
+  text-align: center;
+  
+  mat-icon {
+    font-size: 5rem;
+    width: 5rem;
+    height: 5rem;
+    color: var(--gray-400);
+    margin-bottom: var(--space-lg);
+  }
+  
+  h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin: 0 0 var(--space-md) 0;
+  }
+  
+  p {
+    color: var(--gray-600);
+    margin-bottom: var(--space-xl);
+    max-width: 400px;
+  }
+  
+  button {
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    text-transform: none;
+    min-height: 48px;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .main-content {
+    padding: var(--space-md);
+  }
+  
+  .garajes-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-md);
+    
+    button {
+      width: 100%;
+    }
+  }
+  
+  .garajes-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .reserva-card {
+    mat-card-content {
+      .reserva-info {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}
+

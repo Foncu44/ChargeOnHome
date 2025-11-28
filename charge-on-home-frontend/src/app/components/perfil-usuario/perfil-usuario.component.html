@@ -1,1 +1,215 @@
-<p>perfil-usuario works!</p>
+<div class="perfil-usuario-container">
+  <!-- Header -->
+  <mat-toolbar color="primary" class="app-toolbar">
+    <button mat-icon-button routerLink="/mapa" class="back-button">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span class="logo">
+      <mat-icon>account_circle</mat-icon>
+      Mi Perfil
+    </span>
+    <span class="spacer"></span>
+  </mat-toolbar>
+
+  <!-- Contenido principal -->
+  <div class="main-content" *ngIf="currentUser$ | async as user">
+    <mat-tab-group [(selectedIndex)]="tabIndex" class="profile-tabs">
+      <!-- Tab: Perfil -->
+      <mat-tab label="Mi Perfil">
+        <div class="tab-content">
+          <mat-card class="profile-card">
+            <mat-card-header>
+              <mat-card-title>
+                <mat-icon>person</mat-icon>
+                Información Personal
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <form [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()">
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="form-field-half">
+                    <mat-label>Nombre</mat-label>
+                    <input matInput formControlName="nombre">
+                    <mat-icon matSuffix>badge</mat-icon>
+                    <mat-error *ngIf="perfilForm.get('nombre')?.hasError('required')">
+                      Obligatorio
+                    </mat-error>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="form-field-half">
+                    <mat-label>Apellidos</mat-label>
+                    <input matInput formControlName="apellidos">
+                    <mat-icon matSuffix>badge</mat-icon>
+                    <mat-error *ngIf="perfilForm.get('apellidos')?.hasError('required')">
+                      Obligatorio
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Email</mat-label>
+                  <input matInput type="email" formControlName="email" readonly>
+                  <mat-icon matSuffix>email</mat-icon>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Teléfono</mat-label>
+                  <input matInput formControlName="telefono">
+                  <mat-icon matSuffix>phone</mat-icon>
+                  <mat-error *ngIf="perfilForm.get('telefono')?.hasError('required')">
+                    Obligatorio
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="full-width">
+                  <mat-label>Tipo de Usuario</mat-label>
+                  <input matInput [value]="user.tipoUsuario" readonly>
+                  <mat-icon matSuffix>person</mat-icon>
+                </mat-form-field>
+
+                <div class="form-actions">
+                  <button mat-raised-button color="primary" type="submit">
+                    <mat-icon>save</mat-icon>
+                    Guardar Cambios
+                  </button>
+                </div>
+              </form>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </mat-tab>
+
+      <!-- Tab: Mis Garajes -->
+      <mat-tab label="Mis Garajes">
+        <div class="tab-content">
+          <div class="garajes-header">
+            <h2>Mis Garajes Publicados</h2>
+            <button mat-raised-button color="primary" routerLink="/registrar-garaje">
+              <mat-icon>add</mat-icon>
+              Publicar Nuevo Garaje
+            </button>
+          </div>
+
+          <div class="garajes-grid" *ngIf="misGarajes.length > 0; else noGarajes">
+            <mat-card class="garaje-card" *ngFor="let garaje of misGarajes">
+              <div class="card-image">
+                <img [src]="garaje.fotos[0] || '/assets/images/garage-placeholder.svg'" 
+                     [alt]="garaje.direccion">
+                <div class="card-overlay">
+                  <div class="price-badge">{{ garaje.precioPorHora }}€/h</div>
+                </div>
+              </div>
+              
+              <mat-card-content>
+                <h3>{{ garaje.direccion }}</h3>
+                <div class="garaje-info">
+                  <span><mat-icon>electrical_services</mat-icon> {{ garaje.potenciaCarga }} kW</span>
+                  <span><mat-icon>power</mat-icon> {{ garaje.tipoConector }}</span>
+                </div>
+                <p *ngIf="garaje.descripcion">{{ garaje.descripcion | slice:0:100 }}...</p>
+              </mat-card-content>
+              
+              <mat-card-actions>
+                <button mat-button (click)="verDetalleGaraje(garaje.id!)">
+                  <mat-icon>visibility</mat-icon>
+                  Ver
+                </button>
+                <button mat-button (click)="editarGaraje(garaje.id!)">
+                  <mat-icon>edit</mat-icon>
+                  Editar
+                </button>
+                <button mat-button color="warn" (click)="eliminarGaraje(garaje.id!)">
+                  <mat-icon>delete</mat-icon>
+                  Eliminar
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+
+          <ng-template #noGarajes>
+            <div class="empty-state">
+              <mat-icon>home</mat-icon>
+              <h3>No tienes garajes publicados</h3>
+              <p>Comienza a ganar dinero compartiendo tu garaje</p>
+              <button mat-raised-button color="primary" routerLink="/registrar-garaje">
+                <mat-icon>add</mat-icon>
+                Publicar Mi Primer Garaje
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </mat-tab>
+
+      <!-- Tab: Mis Reservas -->
+      <mat-tab label="Mis Reservas">
+        <div class="tab-content">
+          <h2>Mis Reservas</h2>
+          
+          <div class="reservas-list" *ngIf="misReservas.length > 0; else noReservas">
+            <mat-card class="reserva-card" *ngFor="let reserva of misReservas">
+              <mat-card-header>
+                <mat-card-title>Reserva #{{ reserva.id }}</mat-card-title>
+                <mat-card-subtitle>
+                  <mat-chip [color]="getEstadoColor(reserva.estado)">
+                    {{ getEstadoLabel(reserva.estado) }}
+                  </mat-chip>
+                </mat-card-subtitle>
+              </mat-card-header>
+              
+              <mat-card-content>
+                <div class="reserva-info">
+                  <div class="info-item">
+                    <mat-icon>event</mat-icon>
+                    <div>
+                      <span class="label">Fecha inicio</span>
+                      <span class="value">{{ reserva.fechaInicio | date:'short' }}</span>
+                    </div>
+                  </div>
+                  <div class="info-item">
+                    <mat-icon>event</mat-icon>
+                    <div>
+                      <span class="label">Fecha fin</span>
+                      <span class="value">{{ reserva.fechaFin | date:'short' }}</span>
+                    </div>
+                  </div>
+                  <div class="info-item">
+                    <mat-icon>euro</mat-icon>
+                    <div>
+                      <span class="label">Total</span>
+                      <span class="value">{{ reserva.precioTotal | number:'1.2-2' }}€</span>
+                    </div>
+                  </div>
+                </div>
+              </mat-card-content>
+              
+              <mat-card-actions>
+                <button mat-button (click)="verDetalleGaraje(reserva.garajeId)">
+                  <mat-icon>visibility</mat-icon>
+                  Ver Garaje
+                </button>
+                <button mat-button color="warn" 
+                        (click)="cancelarReserva(reserva.id!)"
+                        *ngIf="reserva.estado === EstadoReserva.PENDIENTE || reserva.estado === EstadoReserva.CONFIRMADA">
+                  <mat-icon>cancel</mat-icon>
+                  Cancelar
+                </button>
+              </mat-card-actions>
+            </mat-card>
+          </div>
+
+          <ng-template #noReservas>
+            <div class="empty-state">
+              <mat-icon>event_busy</mat-icon>
+              <h3>No tienes reservas</h3>
+              <p>Explora los garajes disponibles y haz tu primera reserva</p>
+              <button mat-raised-button color="primary" routerLink="/mapa">
+                <mat-icon>search</mat-icon>
+                Buscar Garajes
+              </button>
+            </div>
+          </ng-template>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

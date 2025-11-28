@@ -1,10 +1,76 @@
 /* You can add global styles to this file, and also import other style files */
 
+// Variables de diseño premium
+:root {
+  // Paleta de colores moderna
+  --primary-color: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-light: #818cf8;
+  --secondary-color: #f59e0b;
+  --accent-color: #10b981;
+  --danger-color: #ef4444;
+  
+  // Colores neutros elegantes
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  
+  // Sombras premium
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  
+  // Gradientes modernos
+  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  --gradient-dark: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  
+  // Tipografía
+  --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  // Espaciado
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+  
+  // Border radius
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+}
+
 html, body { 
   height: 100%; 
   margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: var(--font-primary);
+  background: var(--gray-50);
+  color: var(--gray-900);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
+
+// Importar fuentes premium
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
 
 // Estilos globales responsive
 * {
@@ -16,16 +82,101 @@ input, textarea, select {
   font-size: 16px !important; // Previene zoom automático en iOS
 }
 
-// Mejoras para Angular Material en móviles
+// Mejoras para Angular Material - Diseño Premium
 .mat-mdc-form-field {
   width: 100%;
   
   .mat-mdc-text-field-wrapper {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    
+    &:hover {
+      box-shadow: var(--shadow-md);
+    }
+    
     .mat-mdc-form-field-flex {
       .mat-mdc-form-field-infix {
-        min-height: 48px; // Mejor área de toque en móviles
+        min-height: 48px;
+        font-weight: 500;
       }
     }
+  }
+  
+  .mat-mdc-form-field-label {
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+  
+  .mat-mdc-form-field-hint {
+    color: var(--gray-500);
+    font-size: 0.75rem;
+  }
+}
+
+// Mejorar los selects
+.mat-mdc-select {
+  .mat-mdc-select-trigger {
+    .mat-mdc-select-value {
+      font-weight: 500;
+    }
+  }
+}
+
+// Mejorar los botones
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  text-transform: none;
+  transition: all 0.3s ease;
+  
+  &.mat-mdc-raised-button {
+    box-shadow: var(--shadow-md);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+  }
+}
+
+// Mejorar las cards
+.mat-mdc-card {
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s ease;
+  background: white !important;
+  
+  &:hover {
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .mat-mdc-card-content {
+    background: white !important;
+  }
+  
+  .mat-mdc-card-actions {
+    background: white !important;
+  }
+}
+
+// Mejorar los toolbars
+.mat-toolbar {
+  border-radius: 0;
+  box-shadow: var(--shadow-lg);
+}
+
+// Mejorar los sidenavs
+.mat-drawer {
+  border-radius: 0 var(--radius-2xl) var(--radius-2xl) 0;
+  box-shadow: var(--shadow-xl);
+}
+
+// Mejorar los spinners
+.mat-mdc-progress-spinner {
+  circle {
+    stroke: var(--primary-color);
   }
 }
 
@@ -303,6 +454,81 @@ input, textarea, select {
   button {
     -webkit-appearance: none;
     border-radius: 8px;
+  }
+  
+  // Mejora los FAB en iOS
+  .mat-mdc-fab {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+// Mejoras para dispositivos móviles
+@media (max-width: 768px) {
+  // Mejorar el viewport
+  html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+  
+  // Mejorar el scroll en móviles
+  body {
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden;
+  }
+  
+  // Mejorar los formularios en móviles
+  .mat-mdc-form-field {
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-flex {
+        .mat-mdc-form-field-infix {
+          min-height: 48px;
+        }
+      }
+    }
+  }
+  
+  // Mejorar los botones en móviles
+  .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
+    min-height: 48px;
+    min-width: 48px;
+    touch-action: manipulation;
+  }
+  
+  // Mejorar los iconos en móviles
+  .mat-mdc-icon-button {
+    min-height: 48px;
+    min-width: 48px;
+    touch-action: manipulation;
+  }
+  
+  // Mejorar los FAB en móviles
+  .mat-mdc-fab {
+    min-height: 56px;
+    min-width: 56px;
+    touch-action: manipulation;
+  }
+  
+  // Mejorar el sidenav en móviles
+  .mat-drawer-container {
+    .mat-drawer {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      backdrop-filter: blur(10px);
+    }
+  }
+  
+  // Mejorar las cards en móviles
+  .mat-mdc-card {
+    touch-action: manipulation;
+    
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+  
+  // Mejorar el scroll en móviles
+  .mat-sidenav-content {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
   }
 }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -20,9 +20,13 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDividerModule } from '@angular/material/divider';
+// MatFabModule no existe, usamos MatButtonModule que incluye FAB
 
 // Google Maps
 import { GoogleMapsModule } from '@angular/google-maps';
+
+// Mobile Navigation
+import { MobileNavigationComponent } from '../mobile-navigation/mobile-navigation.component';
 
 // Services and models
 import { AuthService } from '../../services/auth.service';
@@ -60,19 +64,24 @@ interface MarcadorPersonalizado {
     MatButtonToggleModule,
     MatProgressSpinnerModule,
     MatDividerModule,
-    GoogleMapsModule
-  ],
+    GoogleMapsModule,
+    MobileNavigationComponent
+  ] as any[],
   templateUrl: './mapa-garajes.component.html',
   styleUrls: ['./mapa-garajes.component.scss']
 })
 export class MapaGarajesComponent implements OnInit {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
+  @ViewChild('sidenav') sidenav!: any;
 
   filtrosForm!: FormGroup;
   garajes: Garaje[] = [];
   currentUser$: Observable<Usuario | null>;
   isLoading = false;
-  vistaActual: 'list' | 'grid' = 'list';
+  vistaActual: 'list' | 'grid' | 'map' = 'list';
+  isMobile = false;
+  selectedGaraje: Garaje | null = null; // Para almacenar el garaje seleccionado del mapa
+  showMapOverlay = false; // Para controlar si mostrar la tarjeta superpuesta
 
   // Configuración del mapa
   center: google.maps.LatLngLiteral = { lat: 40.4168, lng: -3.7038 }; // Madrid
@@ -158,12 +167,51 @@ export class MapaGarajesComponent implements OnInit {
     private router: Router
   ) {
     this.currentUser$ = this.authService.currentUser$;
+    this.initializeForm();
   }
 
   ngOnInit(): void {
-    this.initializeForm();
+    this.checkMobile();
     this.cargarGarajes();
     this.initializeMap();
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any): void {
+    // Solo ejecutar si estamos en el navegador
+    if (typeof window !== 'undefined') {
+      this.checkMobile();
+    }
+  }
+
+  private checkMobile(): void {
+    // Verificar si estamos en el navegador (no en SSR)
+    if (typeof window !== 'undefined') {
+      this.isMobile = window.innerWidth <= 768;
+    } else {
+      this.isMobile = false; // Default para SSR
+    }
+  }
+
+  // Método para cerrar el sidenav en móvil
+  closeSidenav(): void {
+    if (this.isMobile && this.sidenav) {
+      this.sidenav.close();
+    }
+  }
+
+  // Método para forzar el cierre del sidenav
+  forceCloseSidenav(): void {
+    if (this.sidenav) {
+      this.sidenav.close();
+      // Forzar el cierre también a nivel de DOM
+      setTimeout(() => {
+        const sidenavElement = document.querySelector('mat-sidenav');
+        if (sidenavElement) {
+          sidenavElement.classList.remove('mat-drawer-opened');
+        }
+      }, 100);
+    }
   }
 
   private initializeForm(): void {
@@ -264,22 +312,6 @@ export class MapaGarajesComponent implements OnInit {
     }
   }
 
-  onMarkerClick(marker: google.maps.Marker, index: number): void {
-    const garaje = this.garajes[index];
-    if (garaje?.id) {
-      // Mostrar información del garaje en un InfoWindow
-      console.log('Garaje seleccionado:', {
-        direccion: garaje.direccion,
-        precio: `${garaje.precioPorHora}€/h`,
-        potencia: `${garaje.potenciaCarga}kW`,
-        conector: this.getTipoConectorLabel(garaje.tipoConector),
-        disponible24h: garaje.disponible24h ? 'Sí' : 'No'
-      });
-      
-      // Hacer scroll hasta el garaje en la lista
-      this.scrollToGaraje(index);
-    }
-  }
 
   private scrollToGaraje(index: number): void {
     // Verificar si estamos en el navegador (no en SSR)
@@ -308,6 +340,11 @@ export class MapaGarajesComponent implements OnInit {
   }
 
   aplicarFiltros(): void {
+    // Cerrar sidenav inmediatamente en móvil
+    if (this.isMobile) {
+      this.forceCloseSidenav();
+    }
+    
     if (this.filtrosForm.valid) {
       this.isLoading = true;
       
@@ -341,6 +378,10 @@ export class MapaGarajesComponent implements OnInit {
         });
         this.esperarGoogleMapsYCrearMarcadores();
         this.isLoading = false;
+        // Cerrar filtros en móvil después de aplicar
+        if (this.isMobile) {
+          this.forceCloseSidenav();
+        }
       }, 500);
 
       // Cuando el backend esté listo:
@@ -376,6 +417,7 @@ export class MapaGarajesComponent implements OnInit {
 
   cambiarVista(event: any): void {
     this.vistaActual = event.value;
+    console.log('Vista cambiada a:', this.vistaActual);
   }
 
   verDetalleGaraje(garajeId: number): void {
@@ -439,6 +481,68 @@ export class MapaGarajesComponent implements OnInit {
   private crearMarcadoresSiEsPosible(): void {
     if (this.garajes.length > 0) {
       this.crearMarcadores();
+    }
+  }
+
+  getCurrentLocation(): void {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.center = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          this.zoom = 15;
+          console.log('Ubicación actual:', this.center);
+        },
+        (error) => {
+          console.error('Error al obtener ubicación:', error);
+          // Fallback a Madrid
+          this.center = { lat: 40.4168, lng: -3.7038 };
+          this.zoom = 10;
+        }
+      );
+    } else {
+      console.log('Geolocalización no soportada');
+      // Fallback a Madrid
+      this.center = { lat: 40.4168, lng: -3.7038 };
+      this.zoom = 10;
+    }
+  }
+
+  toggleViewMode(): void {
+    // Alternar entre vista lista+mapa y solo mapa
+    if (this.vistaActual === 'list') {
+      this.vistaActual = 'map';
+    } else {
+      this.vistaActual = 'list';
+    }
+    
+    if (this.vistaActual === 'map') {
+      this.showMapOverlay = false;
+      this.selectedGaraje = null;
+    }
+  }
+
+  onMarkerClick(event: any, index: number): void {
+    const garaje = this.garajes[index];
+    if (garaje) {
+      this.selectedGaraje = garaje;
+      this.showMapOverlay = true;
+      this.center = { lat: garaje.latitud, lng: garaje.longitud };
+      this.zoom = 15;
+    }
+  }
+
+  closeMapOverlay(): void {
+    this.showMapOverlay = false;
+    this.selectedGaraje = null;
+  }
+
+  // Método para toggle del sidenav desde navegación móvil
+  toggleSidenav(): void {
+    if (this.sidenav) {
+      this.sidenav.toggle();
     }
   }
 }

@@ -38,41 +38,40 @@
       </div>
     </div>
     
-    <!-- Barra de búsqueda -->
-    <div class="search-bar-container">
-      <div class="search-bar">
-        <mat-icon class="search-icon">search</mat-icon>
-        <input type="text" 
-               placeholder="Buscar por ciudad, dirección..." 
-               class="search-input"
-               [formControl]="filtrosForm.get('ubicacion')!"
-               (keyup.enter)="aplicarFiltros()">
-      </div>
-      <div class="search-actions">
-        <button mat-icon-button class="filter-button" (click)="toggleSidenav()">
-          <mat-icon>filter_list</mat-icon>
-        </button>
-        <button mat-icon-button class="view-toggle-button" (click)="toggleViewMode()">
-          <mat-icon>{{ vistaActual === 'list' ? 'map' : 'view_list' }}</mat-icon>
-        </button>
-      </div>
-    </div>
   </header>
 
   <!-- Contenido principal -->
   <div class="main-content">
-    <!-- Panel de filtros (sidenav) -->
-    <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav mode="over" class="filters-sidenav" [opened]="false">
-        <div class="filters-panel">
+    <div class="content-wrapper">
+      <!-- Sidebar izquierdo: Búsqueda y Filtros -->
+      <div class="sidebar-left">
+        <!-- Barra de búsqueda -->
+        <div class="search-section">
+          <div class="search-bar">
+            <mat-icon class="search-icon">search</mat-icon>
+            <input type="text" 
+                   placeholder="Buscar por ciudad, dirección..." 
+                   class="search-input"
+                   [formControl]="ubicacionControl"
+                   (keyup.enter)="aplicarFiltros()">
+          </div>
+        </div>
+
+        <!-- Botón Ver en mapa -->
+        <div class="view-map-section">
+          <button mat-raised-button color="primary" class="view-map-button" (click)="toggleViewMode()">
+            <mat-icon>place</mat-icon>
+            Ver en mapa
+          </button>
+        </div>
+
+        <!-- Filtros -->
+        <div class="filters-section">
           <div class="filters-header">
             <h3>
               <mat-icon>filter_list</mat-icon>
-              Filtros de Búsqueda
+              Filtros
             </h3>
-            <button mat-icon-button class="close-filters-btn" (click)="closeSidenav()">
-              <mat-icon>close</mat-icon>
-            </button>
           </div>
           
           <form [formGroup]="filtrosForm" (ngSubmit)="aplicarFiltros()">
@@ -117,22 +116,21 @@
             </mat-checkbox>
 
             <div class="filter-actions">
-              <button mat-raised-button color="primary" type="submit" class="full-width">
+              <button mat-raised-button color="primary" type="submit" class="full-width search-button">
                 <mat-icon>search</mat-icon>
                 Buscar
               </button>
-              <button mat-button type="button" (click)="limpiarFiltros()" class="full-width">
+              <button mat-button type="button" (click)="limpiarFiltros()" class="full-width clear-button">
                 <mat-icon>clear</mat-icon>
                 Limpiar Filtros
               </button>
             </div>
           </form>
         </div>
-      </mat-sidenav>
+      </div>
 
       <!-- Contenido principal con lista y mapa -->
-      <mat-sidenav-content>
-        <div class="content-wrapper">
+      <div class="main-panel">
           <!-- Panel izquierdo: Lista de garajes -->
           <div class="garajes-panel" *ngIf="vistaActual === 'list'">
             <div class="garajes-header">
@@ -141,34 +139,92 @@
             
             <div class="garajes-list">
               <mat-card class="garaje-card" *ngFor="let garaje of garajes" (click)="verDetalleGaraje(garaje.id!)">
-                <div class="card-image">
-                  <img [src]="garaje.fotos[0] || '/assets/images/garage-placeholder.svg'" 
-                       [alt]="'Garaje en ' + garaje.direccion">
-                  <div class="image-overlay">
-                    <div class="price-badge">
-                      <span class="price">{{ garaje.precioPorHora }}€/h</span>
-                      <span class="comision">+20% comisión</span>
+                <div class="card-content-wrapper">
+                  <!-- Sección de imagen (izquierda) -->
+                  <div class="card-image-section">
+                    <div class="main-image-container">
+                      <img [src]="getMainImage(garaje)" 
+                           [alt]="'Garaje en ' + garaje.direccion"
+                           (error)="onImageError($event)"
+                           class="main-image">
+                      
+                      <!-- Flechas de navegación -->
+                      <button mat-icon-button 
+                              class="nav-arrow nav-left" 
+                              *ngIf="garaje.fotos && garaje.fotos.length > 1"
+                              (click)="previousImage($event, garaje)">
+                        <mat-icon>chevron_left</mat-icon>
+                      </button>
+                      <button mat-icon-button 
+                              class="nav-arrow nav-right" 
+                              *ngIf="garaje.fotos && garaje.fotos.length > 1"
+                              (click)="nextImage($event, garaje)">
+                        <mat-icon>chevron_right</mat-icon>
+                      </button>
+                      
+                      <!-- Contador de imágenes (estilo Idealista) -->
+                      <div class="image-counter-badge" *ngIf="garaje.fotos && garaje.fotos.length > 1">
+                        {{ getCurrentImageIndex(garaje) }}/{{ garaje.fotos.length }}
+                      </div>
+                      
+                      <!-- Icono de ubicación -->
+                      <div class="location-icon">
+                        <mat-icon>place</mat-icon>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <!-- Sección de información (derecha) -->
+                  <div class="card-info-section">
+                     <div class="info-header">
+                       <h3 class="garaje-title">{{ garaje.direccion }}</h3>
+                       <div class="price-section">
+                         <span class="price-main">{{ garaje.precioPorHora }}€/h</span>
+                       </div>
+                     </div>
+                    
+                    <div class="garaje-specs">
+                      <span class="spec-item">
+                        <mat-icon>straighten</mat-icon>
+                        {{ garaje.ancho }}x{{ garaje.largo }}x{{ garaje.altura }}m
+                      </span>
+                      <span class="spec-item">
+                        <mat-icon>square_foot</mat-icon>
+                        {{ calcularArea(garaje) | number:'1.2-2' }} m²
+                      </span>
+                      <span class="spec-item">
+                        <mat-icon>electrical_services</mat-icon>
+                        {{ garaje.potenciaCarga }} kW
+                      </span>
+                      <span class="spec-item">
+                        <mat-icon>power</mat-icon>
+                        {{ getTipoConectorLabel(garaje.tipoConector) }}
+                      </span>
+                      <span class="spec-item" *ngIf="garaje.disponible24h">
+                        <mat-icon>schedule</mat-icon>
+                        24h
+                      </span>
+                    </div>
+                    
+                    <p class="garaje-description" *ngIf="garaje.descripcion">
+                      {{ garaje.descripcion | slice:0:150 }}{{ garaje.descripcion.length > 150 ? '...' : '' }}
+                    </p>
+                    
+                    <div class="card-actions">
+                      <button mat-button class="action-button contact-button" (click)="contactar($event, garaje)">
+                        <mat-icon>chat_bubble_outline</mat-icon>
+                        Contactar
+                      </button>
+                      <button mat-button class="action-button phone-button" (click)="verTelefono($event, garaje)">
+                        <mat-icon>phone</mat-icon>
+                        Ver teléfono
+                      </button>
+                      <button mat-icon-button class="icon-button" (click)="toggleFavorito($event, garaje)">
+                        <mat-icon>{{ isFavorito(garaje) ? 'favorite' : 'favorite_border' }}</mat-icon>
+                      </button>
                     </div>
                   </div>
                 </div>
-                
-                <mat-card-content>
-                  <h4>{{ garaje.direccion }}</h4>
-                  <div class="garaje-info">
-                    <div class="info-item">
-                      <mat-icon>electrical_services</mat-icon>
-                      <span>{{ garaje.potenciaCarga }} kW</span>
-                    </div>
-                    <div class="info-item">
-                      <mat-icon>power</mat-icon>
-                      <span>{{ getTipoConectorLabel(garaje.tipoConector) }}</span>
-                    </div>
-                    <div class="info-item" *ngIf="garaje.disponible24h">
-                      <mat-icon>schedule</mat-icon>
-                      <span>24h</span>
-                    </div>
-                  </div>
-                </mat-card-content>
               </mat-card>
 
               <!-- Mensaje cuando no hay garajes -->
@@ -186,50 +242,66 @@
             </div>
           </div>
 
-          <!-- Panel derecho: Mapa -->
-          <div class="mapa-panel" [class.full-width]="vistaActual === 'map'">
-            <div class="map-container">
-              <google-map
-                *ngIf="marcadores.length > 0"
-                [center]="center"
-                [zoom]="zoom"
-                [options]="mapOptions"
-                (mapClick)="onMapClick($event)"
-                width="100%"
-                height="100%">
-                
-                <!-- Marcadores de garajes -->
-                <map-marker
-                  *ngFor="let marcador of marcadores; let i = index"
-                  [position]="marcador.position"
-                  [title]="marcador.title"
-                  [options]="{
-                    icon: {
-                      url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
-                        <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'>
-                          <circle cx='20' cy='20' r='18' fill='#4CAF50' stroke='#2E7D32' stroke-width='2'/>
-                          <path d='M20 12 L20 28 M12 20 L28 20' stroke='white' stroke-width='2' stroke-linecap='round'/>
-                          <circle cx='20' cy='20' r='6' fill='white'/>
-                        </svg>
-                      `),
-                      scaledSize: { width: 40, height: 40 },
-                      anchor: { x: 20, y: 20 }
-                    }
-                  }"
-                  (mapClick)="onMarkerClick($any($event), i)">
-                </map-marker>
-              </google-map>
+        <!-- Panel derecho: Mapa -->
+        <div class="mapa-panel" [class.full-width]="vistaActual === 'map'">
+          <div class="map-container">
+            <google-map
+              *ngIf="marcadores.length > 0"
+              [center]="center"
+              [zoom]="zoom"
+              [options]="mapOptions"
+              (mapClick)="onMapClick($event)"
+              width="100%"
+              height="100%">
               
-              <!-- Placeholder cuando no hay mapa -->
-              <div *ngIf="marcadores.length === 0" class="map-placeholder">
-                <mat-icon>map</mat-icon>
-                <p>Mapa de garajes disponibles</p>
-                <small>{{ garajes.length }} garajes encontrados</small>
+              <!-- Marcadores de garajes -->
+              <map-marker
+                *ngFor="let marcador of marcadores; let i = index"
+                [position]="marcador.position"
+                [title]="marcador.title"
+                [options]="getMarkerOptions(marcador)"
+                (mapClick)="onMarkerClick($any($event), i)">
+              </map-marker>
+            </google-map>
+            
+            <!-- Placeholder cuando no hay mapa -->
+            <div *ngIf="marcadores.length === 0" class="map-placeholder">
+              <mat-icon>map</mat-icon>
+              <p>Mapa de garajes disponibles</p>
+              <small>{{ garajes.length }} garajes encontrados</small>
+            </div>
+            
+            <!-- Tarjeta de garaje al hacer clic en marcador -->
+            <div class="map-garaje-card" *ngIf="showMapCard && selectedMapGaraje">
+              <div class="card-header">
+                <h4>{{ selectedMapGaraje.direccion }}</h4>
+                <button mat-icon-button class="close-button" (click)="closeMapCard()">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+              <div class="card-image" *ngIf="selectedMapGaraje.fotos && selectedMapGaraje.fotos.length > 0">
+                <img [src]="getMainImage(selectedMapGaraje)" 
+                     [alt]="selectedMapGaraje.direccion"
+                     (error)="onImageError($event)">
+              </div>
+              <div class="card-content">
+                <div class="card-price">{{ selectedMapGaraje.precioPorHora }}€/h</div>
+                <div class="card-specs">
+                  <span><mat-icon>straighten</mat-icon> {{ selectedMapGaraje.ancho }}x{{ selectedMapGaraje.largo }}x{{ selectedMapGaraje.altura }}m</span>
+                  <span><mat-icon>electrical_services</mat-icon> {{ selectedMapGaraje.potenciaCarga }} kW</span>
+                  <span><mat-icon>power</mat-icon> {{ getTipoConectorLabel(selectedMapGaraje.tipoConector) }}</span>
+                </div>
+                <p class="card-description" *ngIf="selectedMapGaraje.descripcion">
+                  {{ selectedMapGaraje.descripcion | slice:0:100 }}{{ selectedMapGaraje.descripcion.length > 100 ? '...' : '' }}
+                </p>
+                <button mat-raised-button color="primary" class="ver-detalle-button" (click)="verDetalleDesdeMapa(selectedMapGaraje)">
+                  Ver detalles
+                </button>
               </div>
             </div>
           </div>
         </div>
-      </mat-sidenav-content>
-    </mat-sidenav-container>
+      </div>
+    </div>
   </div>
 </div>

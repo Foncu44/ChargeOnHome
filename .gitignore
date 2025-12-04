@@ -1,2 +1,7 @@
 node_modules/
 .env
+.env.local
+*.env.local
+PasswordDB.txt
+charge-on-home-backend/setup-supabase-env.ps1
+charge-on-home-backend/setup-supabase-env.sh

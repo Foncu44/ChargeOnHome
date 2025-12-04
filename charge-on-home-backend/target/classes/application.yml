@@ -4,26 +4,8 @@ server:
 spring:
   application:
     name: charge-on-home-backend
-  
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password: 
-    driver-class-name: org.h2.Driver
-  
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        format_sql: true
-  
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}  # Por defecto usa 'local', puede cambiarse con variable de entorno
   
   servlet:
     multipart:
@@ -32,17 +14,18 @@ spring:
 
 # Configuración JWT
 jwt:
-  secret: mySecretKey123456789012345678901234567890
-  expiration: 86400000 # 24 horas en milisegundos
+  secret: ${JWT_SECRET:mySecretKey123456789012345678901234567890}
+  expiration: ${JWT_EXPIRATION:86400000} # 24 horas en milisegundos
 
 # Configuración CORS
 cors:
-  allowed-origins: http://localhost:4200
+  allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:4200}
   allowed-methods: GET,POST,PUT,DELETE,OPTIONS
   allowed-headers: "*"
 
 # Configuración de logging
 logging:
   level:
-    com.chargeonhome.backend: DEBUG
-    org.springframework.security: DEBUG 
+    com.chargeonhome.backend: ${LOG_LEVEL:DEBUG}
+    org.springframework.security: ${SECURITY_LOG_LEVEL:DEBUG}
+    org.hibernate.SQL: ${SQL_LOG_LEVEL:DEBUG} 

@@ -113,14 +113,14 @@ export class DetalleGarajeComponent implements OnInit {
     // Simulación - cuando el backend esté listo, usar:
     // this.garajeService.obtenerGarajePorId(id).subscribe({...})
     
-    // Datos de ejemplo
-    setTimeout(() => {
-      this.garaje = {
-        id: id,
+    // Datos de ejemplo - buscar el garaje por ID
+    const garajesEjemplo = [
+      {
+        id: 1,
         propietarioId: 1,
         direccion: 'Calle Gran Vía 28, Madrid',
-        latitud: 40.4168,
-        longitud: -3.7038,
+        latitud: 40.4194,
+        longitud: -3.7040,
         ancho: 2.5,
         largo: 5.0,
         altura: 2.2,
@@ -133,10 +133,61 @@ export class DetalleGarajeComponent implements OnInit {
         fotos: ['/assets/images/garage-placeholder.svg'],
         activo: true,
         fechaCreacion: new Date()
-      };
+      },
+      {
+        id: 2,
+        propietarioId: 2,
+        direccion: 'Avenida Diagonal 123, Barcelona',
+        latitud: 41.3936,
+        longitud: 2.1589,
+        ancho: 2.8,
+        largo: 5.5,
+        altura: 2.5,
+        precioPorHora: 12.00,
+        precioElectricidad: 0.30,
+        tipoConector: TipoConector.CCS_COMBO_2,
+        potenciaCarga: 22,
+        disponible24h: false,
+        descripcion: 'Garaje moderno con carga rápida, ideal para estancias cortas. Ubicado en una de las avenidas más importantes de Barcelona.',
+        fotos: ['/assets/images/garage-placeholder.svg'],
+        activo: true,
+        fechaCreacion: new Date()
+      },
+      {
+        id: 3,
+        propietarioId: 3,
+        direccion: 'Calle Alcalá 456, Madrid',
+        latitud: 40.4300,
+        longitud: -3.6700,
+        ancho: 2.3,
+        largo: 4.8,
+        altura: 2.0,
+        precioPorHora: 6.75,
+        precioElectricidad: 0.22,
+        tipoConector: TipoConector.SCHUKO,
+        potenciaCarga: 3.7,
+        disponible24h: true,
+        descripcion: 'Opción económica para cargas lentas durante la noche. Perfecto para usuarios que necesitan cargar durante varias horas.',
+        fotos: ['/assets/images/garage-placeholder.svg'],
+        activo: true,
+        fechaCreacion: new Date()
+      }
+    ];
+    
+    setTimeout(() => {
+      const garajeEncontrado = garajesEjemplo.find(g => g.id === id);
       
-      this.center = { lat: this.garaje.latitud, lng: this.garaje.longitud };
-      this.markerPosition = this.center;
+      if (garajeEncontrado) {
+        this.garaje = garajeEncontrado;
+      } else {
+        // Fallback al primer garaje si no se encuentra
+        this.garaje = garajesEjemplo[0];
+      }
+      
+      if (this.garaje) {
+        this.center = { lat: this.garaje.latitud, lng: this.garaje.longitud };
+        this.markerPosition = this.center;
+      }
       this.isLoading = false;
     }, 500);
   }

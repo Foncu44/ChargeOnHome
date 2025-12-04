@@ -9,8 +9,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   
-  <!-- Google Maps API con callback -->
+  <!-- Configurar URL del backend (actualizar después de desplegar backend) -->
   <script>
+    // Esta URL debe actualizarse manualmente después de desplegar el backend
+    // O configurarse como variable de entorno en Vercel y leerse en environment.prod.ts
+    window.__API_URL__ = 'https://tu-backend-url.railway.app/api';
+    
+    // Google Maps API con callback
     function initMap() {
       console.log('Google Maps iniciado con callback');
       window.googleMapsLoaded = true;

@@ -290,4 +290,12 @@ export class DetalleGarajeComponent implements OnInit {
       });
     });
   }
+
+  contactarAnfitrion(): void {
+    // Aquí se podría abrir un modal de contacto o navegar a una página de mensajería
+    // Por ahora, mostramos un mensaje
+    this.snackBar.open('Funcionalidad de contacto próximamente disponible', 'Cerrar', {
+      duration: 3000
+    });
+  }
 }

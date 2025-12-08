@@ -1,0 +1,258 @@
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #1A2238 0%, #4CAF50 100%);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+// Efecto de partículas de fondo (opcional)
+.home-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(76, 175, 80, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(0, 188, 212, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.logo-section {
+  margin-bottom: 3rem;
+  z-index: 1;
+  animation: slideInDown 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  .logo {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2));
+    
+    @media (max-width: 768px) {
+      max-width: 200px;
+    }
+  }
+}
+
+.welcome-section {
+  margin-bottom: 4rem;
+  text-align: center;
+  z-index: 1;
+  animation: slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.2s backwards;
+  
+  .welcome-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    margin: 0;
+    text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+    
+    @media (max-width: 768px) {
+      font-size: 1.75rem;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+.buttons-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 400px;
+  z-index: 1;
+  animation: slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.4s backwards;
+  
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+.btn-primary {
+  min-height: 56px;
+  border-radius: 16px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-transform: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 0 2rem;
+  position: relative;
+  overflow: hidden;
+  
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+    
+    mat-icon {
+      transform: scale(1.2) rotate(5deg);
+    }
+  }
+  
+  &:active {
+    transform: translateY(-2px) scale(0.98);
+  }
+}
+
+.btn-green {
+  background: #4CAF50;
+  color: #FFFFFF;
+  
+  &:hover {
+    background: #45a049;
+  }
+}
+
+.btn-blue {
+  background: #00BCD4;
+  color: #FFFFFF;
+  
+  &:hover {
+    background: #00acc1;
+  }
+}
+
+.illustration-section {
+  margin-top: 4rem;
+  z-index: 1;
+  animation: slideInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.6s backwards;
+  
+  @media (max-width: 768px) {
+    margin-top: 2rem;
+  }
+}
+
+.house-car-illustration {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+  
+  .house-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .car-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+    animation: float 3s ease-in-out infinite 0.5s;
+  }
+  
+  .plug-icon {
+    font-size: 32px;
+    width: 32px;
+    height: 32px;
+    color: #4CAF50;
+    filter: drop-shadow(0 4px 8px rgba(76, 175, 80, 0.5));
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @media (max-width: 768px) {
+    gap: 0.75rem;
+    
+    .house-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+    }
+    
+    .car-icon {
+      font-size: 36px;
+      width: 36px;
+      height: 36px;
+    }
+    
+    .plug-icon {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+  }
+}
+
+// Animaciones
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+

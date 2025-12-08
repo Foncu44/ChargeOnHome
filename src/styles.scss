@@ -2,13 +2,18 @@
 
 // Variables de diseño premium
 :root {
-  // Paleta de colores moderna
-  --primary-color: #6366f1;
-  --primary-dark: #4f46e5;
-  --primary-light: #818cf8;
-  --secondary-color: #f59e0b;
-  --accent-color: #10b981;
+  // Paleta de colores - ChargeOnHouse
+  --primary-color: #4CAF50; // Verde energía
+  --primary-dark: #45a049;
+  --primary-light: #66bb6a;
+  --secondary-color: #00BCD4; // Azul tecnología
+  --secondary-dark: #00acc1;
+  --secondary-light: #26c6da;
+  --accent-color: #4CAF50;
   --danger-color: #ef4444;
+  --dark-blue: #1A2238; // Azul oscuro fondo
+  --white: #FFFFFF;
+  --gray-soft: #F5F5F5;
   
   // Colores neutros elegantes
   --gray-50: #f9fafb;
@@ -30,11 +35,11 @@
   --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   --shadow-2xl: 0 25px 50px -12px rgb(0 0 0 / 0.25);
   
-  // Gradientes modernos
-  --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  --gradient-dark: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  // Gradientes modernos - ChargeOnHouse
+  --gradient-primary: linear-gradient(135deg, #1A2238 0%, #4CAF50 100%);
+  --gradient-secondary: linear-gradient(135deg, #00BCD4 0%, #4CAF50 100%);
+  --gradient-accent: linear-gradient(135deg, #4CAF50 0%, #66bb6a 100%);
+  --gradient-dark: linear-gradient(135deg, #1A2238 0%, #2c3e50 100%);
   
   // Tipografía
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

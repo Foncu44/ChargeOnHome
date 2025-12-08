@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--gray-50);
+  background: #F5F5F5;
   animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -10,20 +10,18 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: var(--gradient-primary);
-  box-shadow: var(--shadow-lg);
+  background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   animation: slideInDown 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   
   .back-button {
-    color: white;
+    color: #1A2238;
     margin-right: var(--space-md);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border-radius: 50%;
     
     &:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(26, 34, 56, 0.1);
       transform: scale(1.1) translateX(-4px);
     }
     
@@ -32,20 +30,10 @@
     }
   }
   
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: var(--space-sm);
-    font-family: var(--font-heading);
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: white;
-    
-    mat-icon {
-      font-size: 1.5rem;
-      width: 1.5rem;
-      height: 1.5rem;
-    }
+  .logo-small {
+    height: 32px;
+    width: auto;
+    object-fit: contain;
   }
   
   .spacer {
@@ -173,14 +161,23 @@
 
 .header-info {
   animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: var(--space-xl);
   
-  h1 {
-    font-family: var(--font-heading);
+  .titulo-casa {
+    font-family: 'Poppins', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: var(--gray-900);
-    margin: 0 0 var(--space-md) 0;
+    color: #1A2238;
+    margin: 0 0 var(--space-sm) 0;
     animation: fadeIn 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .subtitulo-carga {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.125rem;
+    font-weight: 500;
+    color: #757575;
+    margin: 0 0 var(--space-md) 0;
   }
   
   .price-section {
@@ -189,75 +186,59 @@
     gap: var(--space-sm);
     
     .price-main {
-      font-size: 2rem;
+      font-size: 1.75rem;
       font-weight: 700;
-      color: var(--primary-color);
-    }
-    
-    .price-note {
-      font-size: 0.875rem;
-      color: var(--gray-600);
+      color: #4CAF50;
     }
   }
 }
 
-.caracteristicas-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-lg);
+.detalles-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-bottom: var(--space-xl);
   
-  .caracteristica-item {
+  .detalle-item {
     display: flex;
     align-items: center;
     gap: var(--space-md);
     padding: var(--space-lg);
     background: white;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--gray-200);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    animation: scaleIn 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
-    
-    @for $i from 1 through 6 {
-      &:nth-child(#{$i}) {
-        animation-delay: #{$i * 0.1}s;
-      }
-    }
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e0e0e0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     
     &:hover {
-      transform: translateY(-4px) scale(1.02);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      border-color: var(--primary-color);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+      border-color: #4CAF50;
     }
     
     mat-icon {
       font-size: 2rem;
       width: 2rem;
       height: 2rem;
-      color: var(--primary-color);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: #4CAF50;
     }
     
-    &:hover mat-icon {
-      transform: scale(1.2) rotate(5deg);
-    }
-    
-    div {
+    .detalle-content {
       display: flex;
       flex-direction: column;
+      flex: 1;
       
-      .label {
-        font-size: 0.75rem;
-        color: var(--gray-600);
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        font-weight: 600;
+      .detalle-label {
+        font-size: 0.875rem;
+        color: #757575;
+        font-weight: 500;
+        margin-bottom: 4px;
       }
       
-      .value {
-        font-size: 1rem;
-        font-weight: 700;
-        color: var(--gray-900);
+      .detalle-value {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1A2238;
       }
     }
   }
@@ -375,13 +356,14 @@
 .calcular-button,
 .reservar-button {
   min-height: 48px;
-  border-radius: var(--radius-lg);
+  border-radius: 12px;
   font-weight: 600;
   text-transform: none;
   margin-top: var(--space-md);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  font-family: 'Poppins', sans-serif;
   
   &[color="accent"] {
     background: var(--gradient-accent);
@@ -397,20 +379,50 @@
       transform: translateY(0) scale(0.98);
     }
   }
+}
+
+.btn-reservar {
+  background: #4CAF50 !important;
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
   
-  &[color="primary"] {
-    background: var(--gradient-primary);
-    color: white;
-    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-    
-    &:hover:not(:disabled) {
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
-    }
-    
-    &:active:not(:disabled) {
-      transform: translateY(0) scale(0.98);
-    }
+  mat-icon {
+    margin-right: 8px;
+  }
+  
+  &:hover:not(:disabled) {
+    background: #45a049 !important;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0) scale(0.98);
+  }
+}
+
+.btn-contactar {
+  background: transparent !important;
+  color: #00BCD4 !important;
+  border: 2px solid #00BCD4 !important;
+  margin-top: var(--space-md);
+  min-height: 48px;
+  border-radius: 12px;
+  font-weight: 600;
+  text-transform: none;
+  font-family: 'Poppins', sans-serif;
+  
+  mat-icon {
+    margin-right: 8px;
+  }
+  
+  &:hover {
+    background: rgba(0, 188, 212, 0.1) !important;
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
   }
 }
 

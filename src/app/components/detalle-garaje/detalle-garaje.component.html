@@ -1,13 +1,10 @@
 <div class="detalle-garaje-container" *ngIf="garaje && !isLoading">
   <!-- Header -->
-  <mat-toolbar color="primary" class="app-toolbar">
+  <mat-toolbar class="app-toolbar">
     <button mat-icon-button routerLink="/mapa" class="back-button">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <span class="logo">
-      <mat-icon>home</mat-icon>
-      Detalle del Garaje
-    </span>
+    <img src="/assets/images/ChargeOnHouse Logo.png" alt="ChargeOnHouse Logo" class="logo-small">
     <span class="spacer"></span>
   </mat-toolbar>
 
@@ -34,57 +31,48 @@
     <!-- Información principal -->
     <div class="info-container">
       <div class="info-main">
-        <!-- Título y precio -->
+        <!-- Título y subtítulo -->
         <div class="header-info">
-          <h1>{{ garaje.direccion }}</h1>
+          <h1 class="titulo-casa">Casa de {{ garaje.direccion.split(',')[0] }}</h1>
+          <p class="subtitulo-carga">
+            Disponible para {{ garaje.potenciaCarga >= 22 ? 'carga rápida' : 'carga estándar' }}
+          </p>
           <div class="price-section">
-            <span class="price-main">{{ garaje.precioPorHora }}€/h</span>
-            <span class="price-note">+ electricidad + 20% comisión</span>
+            <span class="price-main">{{ garaje.precioElectricidad }}€/kWh</span>
           </div>
         </div>
 
-        <!-- Características principales -->
-        <div class="caracteristicas-grid">
-          <div class="caracteristica-item">
-            <mat-icon>electrical_services</mat-icon>
-            <div>
-              <span class="label">Potencia</span>
-              <span class="value">{{ garaje.potenciaCarga }} kW</span>
+        <!-- Sección de detalles -->
+        <div class="detalles-section">
+          <div class="detalle-item">
+            <mat-icon>attach_money</mat-icon>
+            <div class="detalle-content">
+              <span class="detalle-label">Precio por kWh</span>
+              <span class="detalle-value">{{ garaje.precioElectricidad }}€/kWh</span>
             </div>
           </div>
-          <div class="caracteristica-item">
-            <mat-icon>power</mat-icon>
-            <div>
-              <span class="label">Conector</span>
-              <span class="value">{{ getTipoConectorLabel(garaje.tipoConector) }}</span>
-            </div>
-          </div>
-          <div class="caracteristica-item">
-            <mat-icon>straighten</mat-icon>
-            <div>
-              <span class="label">Dimensiones</span>
-              <span class="value">{{ garaje.ancho }}x{{ garaje.largo }}x{{ garaje.altura }}m</span>
-            </div>
-          </div>
-          <div class="caracteristica-item">
-            <mat-icon>square_foot</mat-icon>
-            <div>
-              <span class="label">Área</span>
-              <span class="value">{{ calcularArea() | number:'1.2-2' }} m²</span>
-            </div>
-          </div>
-          <div class="caracteristica-item">
+          
+          <div class="detalle-item">
             <mat-icon>schedule</mat-icon>
-            <div>
-              <span class="label">Disponibilidad</span>
-              <span class="value">{{ garaje.disponible24h ? '24 horas' : 'Horario limitado' }}</span>
+            <div class="detalle-content">
+              <span class="detalle-label">Horarios disponibles</span>
+              <span class="detalle-value">{{ garaje.disponible24h ? '24 horas' : 'Horario limitado' }}</span>
             </div>
           </div>
-          <div class="caracteristica-item">
-            <mat-icon>bolt</mat-icon>
-            <div>
-              <span class="label">Electricidad</span>
-              <span class="value">{{ garaje.precioElectricidad }}€/kWh</span>
+          
+          <div class="detalle-item">
+            <mat-icon>power</mat-icon>
+            <div class="detalle-content">
+              <span class="detalle-label">Tipo de conector</span>
+              <span class="detalle-value">{{ getTipoConectorLabel(garaje.tipoConector) }}</span>
+            </div>
+          </div>
+          
+          <div class="detalle-item">
+            <mat-icon>location_on</mat-icon>
+            <div class="detalle-content">
+              <span class="detalle-label">Distancia desde tu ubicación</span>
+              <span class="detalle-value">Calculando...</span>
             </div>
           </div>
         </div>
@@ -189,11 +177,18 @@
                 </div>
               </div>
 
-              <button mat-raised-button color="primary" type="submit" 
+              <button mat-raised-button type="submit" 
                       [disabled]="!reservaForm.valid || !calculoPrecio"
-                      class="full-width reservar-button">
-                <mat-icon>check_circle</mat-icon>
-                Confirmar Reserva
+                      class="full-width reservar-button btn-reservar">
+                <mat-icon>bolt</mat-icon>
+                Reservar carga
+              </button>
+              
+              <button mat-stroked-button type="button" 
+                      class="full-width btn-contactar"
+                      (click)="contactarAnfitrion()">
+                <mat-icon>chat</mat-icon>
+                Contactar anfitrión
               </button>
             </form>
           </mat-card-content>

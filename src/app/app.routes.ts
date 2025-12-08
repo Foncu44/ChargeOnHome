@@ -5,15 +5,16 @@ import { DetalleGarajeComponent } from './components/detalle-garaje/detalle-gara
 import { RegistrarGarajeComponent } from './components/registrar-garaje/registrar-garaje.component';
 import { LoginComponent } from './components/auth/login/login.component';
 import { RegistroComponent } from './components/auth/registro/registro.component';
+import { HomeComponent } from './components/home/home.component';
 import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/mapa', pathMatch: 'full' },
+  { path: '', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
   { path: 'mapa', component: MapaGarajesComponent },
   { path: 'garaje/:id', component: DetalleGarajeComponent },
   { path: 'perfil', component: PerfilUsuarioComponent, canActivate: [authGuard] },
   { path: 'registrar-garaje', component: RegistrarGarajeComponent, canActivate: [authGuard] },
-  { path: '**', redirectTo: '/mapa' }
+  { path: '**', redirectTo: '' }
 ];

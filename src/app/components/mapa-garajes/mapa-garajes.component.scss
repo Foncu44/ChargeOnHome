@@ -24,21 +24,12 @@
     .logo {
       display: flex;
       align-items: center;
-      gap: 8px;
-      color: white;
-      font-size: 1.5rem;
-      font-weight: 700;
-      font-family: var(--font-heading);
       
-      mat-icon {
-        font-size: 2rem;
-        width: 2rem;
-        height: 2rem;
-        color: white;
-      }
-      
-      span {
-        color: white;
+      .logo-img {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+        filter: brightness(0) invert(1); // Hacer el logo blanco
       }
     }
     

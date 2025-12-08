@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #1A2238 0%, #4CAF50 100%);
   padding: 20px;
   position: relative;
   overflow: hidden;
@@ -88,7 +88,7 @@
     
     &:hover {
       transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+      box-shadow: 0 8px 24px rgba(76, 175, 80, 0.4);
     }
     
     &:active {

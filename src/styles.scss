@@ -128,11 +128,12 @@ input, textarea, select {
   }
 }
 
-// Mejorar los botones con animaciones estilo Apple
+// Mejorar los botones con animaciones estilo Apple y colores del logo
 .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
   border-radius: var(--radius-lg);
   font-weight: 600;
   text-transform: none;
+  font-family: 'Poppins', sans-serif;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -175,6 +176,26 @@ input, textarea, select {
   
   &:active {
     transform: scale(0.98);
+  }
+  
+  // Botones primary con color verde del logo
+  &[color="primary"] {
+    background: var(--primary-color) !important;
+    color: white !important;
+    
+    &:hover:not(:disabled) {
+      background: var(--primary-dark) !important;
+    }
+  }
+  
+  // Botones accent con color azul del logo
+  &[color="accent"] {
+    background: var(--secondary-color) !important;
+    color: white !important;
+    
+    &:hover:not(:disabled) {
+      background: var(--secondary-dark) !important;
+    }
   }
 }
 
@@ -219,10 +240,66 @@ input, textarea, select {
   box-shadow: var(--shadow-xl);
 }
 
-// Mejorar los spinners
+// Mejorar los spinners con color verde del logo
 .mat-mdc-progress-spinner {
   circle {
     stroke: var(--primary-color);
+  }
+}
+
+// Actualizar los form fields para usar colores del logo
+.mat-mdc-form-field {
+  .mat-mdc-text-field-wrapper {
+    .mat-mdc-form-field-flex {
+      .mat-mdc-form-field-infix {
+        .mat-mdc-form-field-label {
+          color: var(--gray-700);
+        }
+      }
+    }
+    
+    &.mdc-text-field--focused {
+      .mat-mdc-form-field-flex {
+        .mat-mdc-form-field-infix {
+          .mat-mdc-form-field-label {
+            color: var(--primary-color);
+          }
+        }
+      }
+    }
+  }
+  
+  &.mat-focused {
+    .mat-mdc-text-field-wrapper {
+      .mat-mdc-form-field-outline {
+        .mdc-notched-outline__leading,
+        .mdc-notched-outline__notch,
+        .mdc-notched-outline__trailing {
+          border-color: var(--primary-color) !important;
+        }
+      }
+    }
+  }
+}
+
+// Actualizar los tabs con colores del logo
+.mat-mdc-tab-group {
+  .mat-mdc-tab-header {
+    .mat-mdc-tab-label-container {
+      .mat-mdc-tab-labels {
+        .mat-mdc-tab-label {
+          &.mdc-tab--active {
+            color: var(--primary-color) !important;
+          }
+        }
+      }
+    }
+    
+    .mdc-tab-indicator {
+      .mdc-tab-indicator__content {
+        border-color: var(--primary-color) !important;
+      }
+    }
   }
 }
 

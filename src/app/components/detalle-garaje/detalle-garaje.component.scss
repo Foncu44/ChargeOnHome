@@ -30,10 +30,24 @@
     }
   }
   
+  .logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+  }
+  
   .logo-small {
     height: 32px;
     width: auto;
+    max-width: 150px;
     object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: block;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
   }
   
   .spacer {
